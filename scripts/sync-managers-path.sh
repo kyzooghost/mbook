@@ -17,6 +17,8 @@ if [[ ! -f "${MOBILE_PDF_PATH}" ]]; then
   exit 0
 fi
 
+SYNC_FROM_MOBILE=0
+
 get_mtime() {
   local file_path="$1"
 
@@ -48,7 +50,12 @@ mobile_mtime="$(get_mtime "${MOBILE_PDF_PATH}")"
 
 if (( mobile_mtime > repo_effective_ts )); then
   echo "Phone copy is newer; syncing it into the repo, then mirroring back."
-  cp "${MOBILE_PDF_PATH}" "${REPO_FILE_PATH}"
+  if cmp -s "${MOBILE_PDF_PATH}" "${REPO_FILE_PATH}"; then
+    echo "Mobile copy is newer by timestamp only; content is identical."
+  else
+    cp "${MOBILE_PDF_PATH}" "${REPO_FILE_PATH}"
+    SYNC_FROM_MOBILE=1
+  fi
 else
   echo "Repo copy is newer; syncing it into the phone path."
   cp "${REPO_FILE_PATH}" "${MOBILE_PDF_PATH}"
@@ -60,5 +67,9 @@ if ! git -C "${REPO_ROOT}" diff --quiet -- "${PDF_FILE_NAME}"; then
   git -C "${REPO_ROOT}" commit -m "chore: sync managers path PDF from mobile or repo"
   git -C "${REPO_ROOT}" push
 else
-  echo "No repo changes to commit."
+  if (( SYNC_FROM_MOBILE == 1 )); then
+    echo "No repo changes to commit after syncing from phone; file contents are unchanged."
+  else
+    echo "No repo changes to commit."
+  fi
 fi
