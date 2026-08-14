@@ -4,7 +4,7 @@ set -euo pipefail
 PDF_FILE_NAME="the-managers-path-a-guide-for-tech-leaders-camille-fournier_compress.pdf"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_FILE_PATH="${REPO_ROOT}/${PDF_FILE_NAME}"
-MOBILE_PDF_PATH="${MOBILE_PDF_PATH:-/data/data/com.termux/files/home/storage/downloads/${PDF_FILE_NAME}}"
+MOBILE_PDF_PATH="${MOBILE_PDF_PATH:-/storage/emulated/0/Download/${PDF_FILE_NAME}}"
 
 if [[ ! -f "${REPO_FILE_PATH}" ]]; then
   echo "Repo PDF missing: ${REPO_FILE_PATH}"
