@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PDF_FILE_NAME="the-managers-path-a-guide-for-tech-leaders-camille-fournier_compress.pdf"
+PDF_FILE_NAME="fundamentals-of-software-architecture.pdf"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_FILE_PATH="${REPO_ROOT}/${PDF_FILE_NAME}"
 MOBILE_PDF_PATH="${MOBILE_PDF_PATH:-/data/data/com.termux/files/home/storage/downloads/${PDF_FILE_NAME}}"
@@ -64,7 +64,7 @@ fi
 if ! git -C "${REPO_ROOT}" diff --quiet -- "${PDF_FILE_NAME}"; then
   echo "Repo file changed. Committing and pushing."
   git -C "${REPO_ROOT}" add "${PDF_FILE_NAME}"
-  git -C "${REPO_ROOT}" commit -m "chore: sync managers path PDF from mobile or repo"
+  git -C "${REPO_ROOT}" commit -m "chore: sync fundamentals of software architecture PDF"
   git -C "${REPO_ROOT}" push
 else
   if (( SYNC_FROM_MOBILE == 1 )); then
